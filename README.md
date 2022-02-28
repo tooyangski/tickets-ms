@@ -1,14 +1,15 @@
 # tickets-ms
 Tickets Management System using MERN
 
-# root directory
+
 # npm run dev
+Must be in ROOT Directory
 To run the backend and frontend concurrently
 
-# cd frontend
 # npm start
-To run the front end only
+Must be in frontend folder
+To run the frontend only
 
-# cd backend
 # npm run server
+Must be in backend folder
 To run the backend only
