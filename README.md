@@ -1,6 +1,7 @@
 # tickets-ms
 Tickets Management System using MERN
 
+# No design as of the moment, will fix soon
 
 # npm run dev
 Must be in ROOT Directory
