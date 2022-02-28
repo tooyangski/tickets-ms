@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { register, reset } from '../features/auth/authSlice';
+import Spinner from '../layout/Spinner';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +15,27 @@ const Register = () => {
   });
 
   const { name, email, password, confirmPassword } = formData;
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    // if register is error, create a toast
+    if (isError) {
+      toast.error(message);
+    }
+
+    // redirect when logged in if success
+    if (isSuccess) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [dispatch, navigate, isError, isSuccess, message, user]);
 
   // reusable by all input fields
   // gets the previousState then changes the current target only
@@ -32,9 +57,14 @@ const Register = () => {
         email,
         password,
       };
+
+      dispatch(register(userData));
     }
   };
 
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <>
       <section>
@@ -75,6 +105,7 @@ const Register = () => {
               type='password'
               id='password'
               name='password'
+              autoComplete='on'
               value={password}
               onChange={onChange}
               placeholder='Enter your password'
@@ -87,6 +118,7 @@ const Register = () => {
               type='password'
               id='confirmPassword'
               name='confirmPassword'
+              autoComplete='on'
               value={confirmPassword}
               onChange={onChange}
               placeholder='Confirm your password'

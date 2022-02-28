@@ -1,14 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, reset } from '../features/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
+import Spinner from '../layout/Spinner';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
   const { email, password } = formData;
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    // if register is error, create a toast
+    if (isError) {
+      toast.error(message);
+    }
+
+    // redirect when logged in if success
+    if (isSuccess) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [dispatch, navigate, isError, isSuccess, message, user]);
 
   // reusable by all input fields
   // gets the previousState then changes the current target only
@@ -21,7 +45,18 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -51,6 +86,7 @@ const Login = () => {
               type='password'
               id='password'
               name='password'
+              autoComplete='on'
               value={password}
               onChange={onChange}
               placeholder='Enter your password'
