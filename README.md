@@ -10,6 +10,14 @@ To run the backend and frontend concurrently
 Must be in frontend folder
 To run the frontend only
 
+# npm run client
+Must be in ROOT directory
+To run the frontend from root
+
+# npm start
+Must be in ROOT directory
+To run the backend from root
+
 # npm run server
 Must be in backend folder
 To run the backend only
